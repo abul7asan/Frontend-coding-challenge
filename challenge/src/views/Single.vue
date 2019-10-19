@@ -4,20 +4,33 @@
 			<div class="head">
 			</div>
 			<div class="nav">
+				<div class="logo">
+					<a href="#">
+						<img :src="require('@/assets/img/logo-nav.png')" class="next" alt="logo" />
+					</a>
+				</div>
+				<a href="#">
+						<img :src="require('@/assets/img/prev.png')" class="prev" alt="logo" />
+				</a>
+				<a href="#">
+						<img :src="require('@/assets/img/menu-nav.png')" class="menu" alt="logo" />
+				</a>
 			</div>
 		</header>
 		<aside>
 			<article>
 				<div class="poster">
-					<img src="http://femme.nextmedia.ma/content/uploads/2018/07/3a6a533b66.jpg" />
-					<div class="category" >ok</div>
+					<figure>
+						<img :src="post.thumbnail_images.large.url" :alt="post.categories[0].title" />
+					</figure>
+					<div class="category">{{ post.categories[0].title }}</div>
 				</div>
 				<div class="infos">
           <div class="title">
-            jjjjjjjjjjjjjjjjjjjjjjjjjjj
+            {{ post.title }}
           </div>
           <div class="at">
-            ooooooooo
+            {{ getArabeDate(post.date) }}
           </div>
         </div>
 			</article>
@@ -25,7 +38,7 @@
 				<div class="fb">SHARE</div>
 				<div class="tw">SHARE</div>
 			</div>
-			<article class="content">
+			<article class="content" v-html="post.content">
 			</article>
 			<div class="share">
 				<div class="fb">SHARE</div>
@@ -37,6 +50,31 @@
 	</div>
 </template>
 <script>
+import axios from 'axios'
+
+export default {
+	name: 'single',
+	props: {
+		post: Array
+	},
+	methods: {
+    getArabeDate: function(date) {
+      date = new Date(date);
+      var months = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو",
+        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+      ];
+      var days = ["اﻷحد", "اﻷثنين", "الثلاثاء", "اﻷربعاء", "الخميس", "الجمعة", "السبت"];
+      var arDateString = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
+      return arDateString;
+    }
+  },
+	mounted() {
+    axios.get('http://femme.nextmedia.ma/api/get_post/?id=178')
+      .then(response => {
+        this.post = response.data.post
+    })
+	}
+}
 </script>
 <style lang="scss">
 .single {
@@ -50,6 +88,25 @@
 			width: 100%;
 			height: 80px;
 			border-bottom: .2px solid gray;
+			.logo {
+				width: 80px;
+				margin: auto;
+				img.next {
+					height: 80px;
+				}
+			}
+			.prev {
+				height: 35px;
+				position: relative;
+				top: -65px;
+				left: 5px;
+			}
+			.menu {
+				float: right;
+				position: relative;
+				top: -50px;
+				left: -5px;
+			}
 		}
 	}
 	aside {
@@ -62,20 +119,34 @@
         position: relative;
         width: 100%;
         height: 300px;
-        position: relative;
-        img{
-          height: 100%;
-          width: 100%;
-          border-radius: 5px;
+        figure {
+					width: 100%;
+					height: 100%;
+					margin: 0;
+					overflow: hidden;
+	        img {
+	          height: 100%;
+	          width: 100%;
+	          border-radius: 5px;
+	          -webkit-transform: scale(1);
+						transform: scale(1);
+						-webkit-transition: .3s ease-in-out;
+						transition: .3s ease-in-out;
+	        }
+					:hover {
+						transform: scale(1.3);
+	        }
         }
         .category  {
           text-align: right;
           padding: 2px 15px;
-          background-color: red;
+          background-color: #db0303;
+          color: white;
           position: absolute;
           bottom: -10px;
           right: 0;
           border-radius: 5px;
+          font-size: bold;
         }
       }
       .infos {
@@ -120,7 +191,11 @@
 			}
 		}
 		.content {
-			height: 100vh;
+			display: flex;
+			margin: 30px 0;
+			p {
+				margin:auto;
+			}
 		}
 	}
 	footer {

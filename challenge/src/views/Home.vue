@@ -22,7 +22,9 @@
     <aside>
       <article v-for="post in posts" :key="post.id">
         <div class="poster">
+<figure>
           <img :src="post.thumbnail_images.large.url" :alt="post.categories[0].title" />
+        </figure>
           <div class="category" >{{ post.categories[0].title }}</div>
         </div>
         <div class="infos">
@@ -156,10 +158,23 @@ export default {
         width: 100%;
         height: 70%;
         position: relative;
-        img{
+        figure {
+width: 100%;
+height: 100%;
+margin: 0;
+overflow: hidden;
+img{
           height: 100%;
           width: 100%;
           border-radius: 5px;
+          -webkit-transform: scale(1);
+					transform: scale(1);
+					-webkit-transition: .3s ease-in-out;
+					transition: .3s ease-in-out
+        }
+        :hover {
+					transform: scale(1.3);
+				}
         }
         .category  {
           text-align: right;
