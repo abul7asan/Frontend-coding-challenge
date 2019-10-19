@@ -33,9 +33,12 @@
           </div>
         </div>
       </article>
-      <aside>
-      </aside>
+      <div class="more" v-if="isMore">
+        <img :src="require('@/assets/img/more.png')" al="more post"  @click="loadMore()" />
+      </div>
     </aside>
+    <footer>
+    </footer>
   </div>
 </template>
 <script>
@@ -45,10 +48,11 @@ export default {
   name: 'app',
   props: {
     menus: Array,
-    posts: Array
+    posts: Array,
+    isMore: Boolean
   },
   methods: {
-    getArabeDate : function(date) {
+    getArabeDate: function(date) {
       date = new Date(date);
       var months = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو",
         "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
@@ -56,9 +60,17 @@ export default {
       var days = ["اﻷحد", "اﻷثنين", "الثلاثاء", "اﻷربعاء", "الخميس", "الجمعة", "السبت"];
       var arDateString = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
       return arDateString;
+    },
+    loadMore: function() {
+      axios.get('http://femme.nextmedia.ma/api/get_recent_posts/?page=2')
+        .then(response => {
+          this.posts = this.posts.concat(response.data.posts)
+      })
+      this.isMore = false
     }
   },
   mounted() {
+    this.isMore = true
     axios.get('http://femme.nextmedia.ma/api/menus/get_menu/?menu_id=7')
       .then(response => {
         this.menus = response.data.menu.output
@@ -199,6 +211,19 @@ export default {
         }
       }
     }
+    .more {
+      text-align: center;
+      padding: 20px 0;
+      img {
+        cursor: pointer;
+      }
+    }
+  }
+  footer {
+    width: 100%;
+    height: 100px;
+    background-color: gray;
+    margin-top: 5px;
   }
 }
 @media only screen and (max-width: 780px) {
