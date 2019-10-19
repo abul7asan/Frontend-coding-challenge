@@ -2,6 +2,15 @@
   <div id="in">
     <header>
     <div class="head">
+      <div class="logo">
+        <a href="#">
+          <img :src="require('@/assets/img/logo.png')" alt="logo" />
+          <div class="name">next media</div>
+        </a>
+      </div>
+      <a href="#">
+        <img class="menu" :src="require('@/assets/img/menu.png')" alt="menu" />
+      </a>
     </div>
     <nav>
       <ul>
@@ -13,17 +22,19 @@
       <article v-for="post in posts" :key="post.id">
         <div class="poster">
           <img :src="post.thumbnail_images.large.url" :alt="post.categories[0].title" />
-          <div class="category">{{ post.categories[0].title }}</div>
+          <div class="category" >{{ post.categories[0].title }}</div>
         </div>
         <div class="infos">
           <div class="title">
             {{ post.title }}
           </div>
           <div class="at">
-            {{ post.date }}
+            {{ getArabeDate(post.date) }}
           </div>
         </div>
       </article>
+      <aside>
+      </aside>
     </aside>
   </div>
 </template>
@@ -35,6 +46,17 @@ export default {
   props: {
     menus: Array,
     posts: Array
+  },
+  methods: {
+    getArabeDate : function(date) {
+      date = new Date(date);
+      var months = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو",
+        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+      ];
+      var days = ["اﻷحد", "اﻷثنين", "الثلاثاء", "اﻷربعاء", "الخميس", "الجمعة", "السبت"];
+      var arDateString = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
+      return arDateString;
+    }
   },
   mounted() {
     axios.get('http://femme.nextmedia.ma/api/menus/get_menu/?menu_id=7')
@@ -80,6 +102,33 @@ export default {
     .head {
       height: 70px;
       border-bottom: .1px solid white;
+      .logo {
+        width: 150px;
+        margin: auto;
+        img {
+          height: 50px;
+          padding-top: 10px;
+        }
+        .name {
+          display: inline-block;
+          width: 83px;
+          font-family: sans-serif;
+          font-size: 26px;
+          font-weight: bold;
+          color: white;
+          line-height: 24px;
+          position: relative;
+          top: -7px;
+          left: 12px;
+        }
+      }
+      img.menu {
+        float: right;
+        position: relative;
+        top: -45px;
+        height: 20px;
+        right: 20px;
+      }
     }
     nav {
       height: 40px;
@@ -91,7 +140,7 @@ export default {
             cursor: pointer;
             margin-top: 2px;
             :hover {
-              background-color: black;
+              background-color: #690a5f;
               border-radius: 5px;
             }
             a {
@@ -112,6 +161,7 @@ export default {
       height: 300px;
       margin: 5px auto;
       .poster {
+        position: relative;
         width: 100%;
         height: 70%;
         position: relative;
@@ -137,12 +187,15 @@ export default {
         text-align: right;
         position: relative;
         .title {
-
+          font-size: 20px;
+          font-weight: bold;
         }
         .at {
+          font-size: 16px;
           position: absolute;
           bottom: 0;
           right: 0;
+          color: gray;
         }
       }
     }
