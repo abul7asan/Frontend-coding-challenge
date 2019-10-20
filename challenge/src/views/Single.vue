@@ -9,7 +9,7 @@
 						<img :src="require('@/assets/img/logo-nav.png')" class="next" alt="logo" />
 					</a>
 				</div>
-				<a href="#">
+				<a :href="prev">
 						<img :src="require('@/assets/img/prev.png')" class="prev" alt="logo" />
 				</a>
 				<a href="#">
@@ -45,24 +45,15 @@ export default {
 	},
 	data() {
 		return {
-			post: {}
+			post: {},
+			prev: ''
 		}
 	},
-	methods: {
-    getArabeDate: function(date) {
-      date = new Date(date);
-      var months = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو",
-        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
-      ];
-      var days = ["اﻷحد", "اﻷثنين", "الثلاثاء", "اﻷربعاء", "الخميس", "الجمعة", "السبت"];
-      var arDateString = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
-      return arDateString;
-    }
-  },
 	mounted() {
     axios.get('http://femme.nextmedia.ma/api/get_post/?id=178')
       .then(response => {
         this.post = response.data.post
+        this.prev = response.data.previous_url
     })
 	}
 }
@@ -176,6 +167,7 @@ export default {
 				font-size: 16px;
 				font-weight: bold;
 				cursor: pointer;
+				transition: all .5s;
 				span {
 					font-size: 14px;
 					font-weight: 100;
