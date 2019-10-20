@@ -4,7 +4,7 @@ app that lists news, and a single page with swiping feature
 # Introduction
 Après avoir étudié les tâches du challenge je comprends qu'il me faut réaliser un application avec Vue CLI.
 
-# Séquence de tâches
+# Séquence des tâches
 1. faire la structure en html et sass comme le designe proposé pour la page d'accueil
 2. installer axios pour extracter les donnés a partir de JSON
 3. exporter les donnés du navbar et afficher dans la page d'accueil Home view
