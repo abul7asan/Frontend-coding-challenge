@@ -1,41 +1,8 @@
 <template>
 	<div class="home">
-		<header>
-    <div class="head">
-      <div class="logo">
-        <a href="#">
-          <img :src="require('@/assets/img/logo.png')" alt="logo" />
-          <div class="name">next media</div>
-        </a>
-      </div>
-      <a href="#">
-        <img class="menu" :src="require('@/assets/img/menu.png')" alt="menu" />
-      </a>
-    </div>
-    <nav>
-      <ul>
-        <li><a href=""><img :src="require('@/assets/img/home.png')" alt="home page" /></a></li>
-        <li v-for="menu in menus" :key="menu.object_id"><a href="#">{{ menu.label }}</a></li>
-      </ul>
-    </nav>
-    </header>
+		<Navbar :items="menus" />
     <aside>
-      <article v-for="post in posts" :key="post.id">
-        <div class="poster">
-					<figure>
-            <img :src="post.thumbnail_images.large.url" :alt="post.categories[0].title" />
-          </figure>
-          <div class="category" >{{ post.categories[0].title }}</div>
-        </div>
-        <div class="infos">
-          <div class="title">
-            {{ post.title }}
-          </div>
-          <div class="at">
-            {{ getArabeDate(post.date) }}
-          </div>
-        </div>
-      </article>
+      <Post v-for="post in posts" :post="post" :key="post.id" />
       <div class="more" v-if="isMore">
         <img :src="require('@/assets/img/more.png')" al="more post"  @click="loadMore()" />
       </div>
@@ -47,24 +14,23 @@
 
 <script>
 import axios from 'axios'
+import Navbar from '@/components/Navbar.vue'
+import Post from '@/components/Post.vue'
 
 export default {
   name: 'home',
-  props: {
-    menus: Array,
-    posts: Array,
-    isMore: Boolean
+  data() {
+		return {
+			menus: [],
+			posts: [],
+			isMore: false
+		}
+  },
+	components: {
+		Navbar,
+		Post
   },
   methods: {
-    getArabeDate: function(date) {
-      date = new Date(date);
-      var months = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو",
-        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
-      ];
-      var days = ["اﻷحد", "اﻷثنين", "الثلاثاء", "اﻷربعاء", "الخميس", "الجمعة", "السبت"];
-      var arDateString = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
-      return arDateString;
-    },
     loadMore: function() {
       axios.get('http://femme.nextmedia.ma/api/get_recent_posts/?page=2')
         .then(response => {

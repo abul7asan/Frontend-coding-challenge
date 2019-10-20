@@ -18,31 +18,16 @@
 			</div>
 		</header>
 		<aside>
-			<article>
-				<div class="poster">
-					<figure>
-						<img :src="post.thumbnail_images.large.url" :alt="post.categories[0].title" />
-					</figure>
-					<div class="category">{{ post.categories[0].title }}</div>
-				</div>
-				<div class="infos">
-          <div class="title">
-            {{ post.title }}
-          </div>
-          <div class="at">
-            {{ getArabeDate(post.date) }}
-          </div>
-        </div>
-			</article>
+			<Post :post="post" />
 			<div class="share">
-				<div class="fb">SHARE</div>
-				<div class="tw">SHARE</div>
+				<div class="fb">شارك <span>(0)</span></div>
+				<div class="tw">غرد <span>(0)</span></div>
 			</div>
 			<article class="content" v-html="post.content">
 			</article>
 			<div class="share">
-				<div class="fb">SHARE</div>
-				<div class="tw">SHARE</div>
+				<div class="fb">شارك <span>(0)</span></div>
+				<div class="tw">غرد <span>(0)</span></div>
 			</div>
 		</aside>
 		<footer>
@@ -51,11 +36,17 @@
 </template>
 <script>
 import axios from 'axios'
+import Post from '@/components/Post.vue'
 
 export default {
 	name: 'single',
-	props: {
-		post: Array
+	components: {
+		Post
+	},
+	data() {
+		return {
+			post: {}
+		}
 	},
 	methods: {
     getArabeDate: function(date) {
@@ -87,7 +78,7 @@ export default {
 		.nav {
 			width: 100%;
 			height: 80px;
-			border-bottom: .2px solid gray;
+			border-bottom: .2px solid #dadada;
 			.logo {
 				width: 80px;
 				margin: auto;
@@ -176,23 +167,58 @@ export default {
 			width: 95%;
 			margin: 5px auto;
 			.fb,.tw {
-				width: 49%;
+				width: 42%;
 				display: inline-block;
-				text-align: center;
-				border: .5px solid black;
+				text-align: right;
 				border-radius: 5px;
+				padding-right: 20px;
+				color: white;
+				font-size: 16px;
+				font-weight: bold;
+				cursor: pointer;
+				span {
+					font-size: 14px;
+					font-weight: 100;
+				}
 			}
 			.fb {
 				background-color: #3b5998;
+				&:before {
+					content: '';
+					background : url('~@/assets/img/facebook.png') no-repeat;
+					width: 30px;
+					height: 24px;
+					position: relative;
+					float: left;
+					margin-left: 10px;
+					margin-top: 3px;
+				}
+				&:hover {
+					box-shadow: 2px 3px #183a82
+				}
 			}
 			.tw {
 				float: right;
 				background-color: #1da1f2;
+				&:before {
+					content: '';
+					background : url('~@/assets/img/twitter.png') no-repeat;
+					width: 30px;
+					height: 24px;
+					position: relative;
+					float: left;
+					margin-left: 10px;
+					margin-top: 3px;
+				}
+				&:hover {
+					box-shadow: 2px 3px #1272ad;
+				}
 			}
 		}
 		.content {
 			display: flex;
-			margin: 30px 0;
+			margin-top: 30px;
+			margin-bottom: 20px;
 			p {
 				margin:auto;
 			}
