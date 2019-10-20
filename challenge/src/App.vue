@@ -1,23 +1,23 @@
 <template>
   <div id="in">
-    <Single />
+    <Home />
   </div>
 </template>
 <script>
-/*import Home from './views/Home.vue'
+import Home from './views/Home.vue'
 export default {
   name: 'app',
   components: {
     Home
   }
-}*/
-import Single from './views/Single.vue'
+}
+/*import Single from './views/Single.vue'
 export default {
   name: 'app',
   components: {
     Single
   }
-}
+}*/
 </script>
 <style lang="scss">
 @font-face {
